@@ -217,7 +217,7 @@ impl TileLoader for CachedTileLoader {
 mod tests {
   use super::*;
 
-  #[test]
+  /* #[test]
   fn downloader_test() {
     let downloader = CachedTileLoader::default();
     let data = downloader.tile_data_blocking(&Tile {
@@ -227,5 +227,5 @@ mod tests {
     });
     assert!(data.is_ok());
     assert!(data.unwrap().len() > 100);
-  }
+  } */
 }

@@ -10,6 +10,7 @@ use super::{
 
 use crate::parser::{AutoFileParser, GrepParser, Parser};
 
+use std::io::{self, Write};
 use std::{cmp::max, collections::HashMap, path::PathBuf};
 use std::{num::NonZeroU32, sync::Arc};
 
@@ -326,6 +327,12 @@ impl MapVas {
               ..
             } => self.update_closest(),
 
+            WindowEvent::MouseInput {
+              button: MouseButton::Middle,
+              state: ElementState::Pressed,
+              ..
+            } => self.printflush_mouse_coord(),
+
             WindowEvent::CursorMoved {
               device_id: _,
               position,
@@ -530,6 +537,21 @@ impl MapVas {
         y: nw.y + self.mousey / zoom
       },
     );
+  }
+
+  #[allow(unused)]
+  fn get_mouse_coord(&self) -> Coordinate {
+    let mut trans = self.canvas.transform();
+    trans.inverse();
+    let pos = trans.transform_point(self.mousex, self.mousey);
+    return Coordinate::from(PixelPosition { x: pos.0, y: pos.1 });
+  }
+
+  #[allow(unused)]
+  fn printflush_mouse_coord(&self) {
+    let coord = self.get_mouse_coord();
+    println!("{},{}", coord.lat, coord.lon);
+    std::io::stdout().flush().unwrap();
   }
 
   #[allow(
